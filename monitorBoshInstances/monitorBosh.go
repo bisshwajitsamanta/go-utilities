@@ -1,12 +1,15 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/jedib0t/go-pretty/table"
 	"log"
 	"os"
 	"os/exec"
 )
+
+var cd CountDeployment
 
 type CountDeployment struct {
 	Tables []struct {
@@ -15,6 +18,25 @@ type CountDeployment struct {
 			Name string `json:"name"`
 		} `json:"Rows"`
 	} `json:"Tables"`
+}
+
+func List() string {
+
+	deploymentList, err := boshWatch("bosh", []string{"ds", "--json"})
+	if err != nil {
+		log.Println("Unable to Connect to Bosh Instances!")
+	}
+
+	if err := json.Unmarshal(deploymentList, &cd); err != nil {
+		log.Println("Error Happened::", err)
+	}
+	for _, t := range cd.Tables {
+		for _, r := range t.Rows {
+			fmt.Println(r.Name)
+		}
+	}
+
+	return ""
 }
 
 func boshWatch(cmd string, argsArr []string) ([]byte, error) {
@@ -33,17 +55,9 @@ func boshWatch(cmd string, argsArr []string) ([]byte, error) {
 	return nil, nil
 }
 
-func countDeployments() {
-
-}
-
 func main() {
 
-	deploymentList, err := boshWatch("bosh", []string{"ds", "--json"})
-	if err != nil {
-		log.Println("Unable to Connect to Bosh Instances!")
-	}
-	fmt.Println(deploymentList)
+	fmt.Println(List())
 
 	// Dummy Data
 
@@ -58,8 +72,8 @@ func main() {
 	})
 	t.AppendSeparator()
 	t.AppendRows([]table.Row{
-		{1, "Schwab-UAT", "PASSING", "All VMS are Passing"},
-		{2, "Schwab-PROD", "PASSING", "All VMS are Passing"},
+		{1, "Schwab-UAT", "PASSING", 3, "All VMS are Passing"},
+		{2, "Schwab-PROD", "PASSING", 4, "All VMS are Passing"},
 	})
 	t.Render()
 }
