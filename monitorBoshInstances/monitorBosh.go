@@ -43,16 +43,12 @@ func boshWatch(cmd string, argsArr []string) ([]byte, error) {
 	args := argsArr
 	out := exec.Command(cmd, args...)
 
-	out.Stdout = os.Stdout
-	out.Stdin = os.Stdin
-	out.Stderr = os.Stderr
-
-	err := out.Run()
+	stdoutStderr, err := out.CombinedOutput()
 	if err != nil {
 		log.Fatal(err)
-
 	}
-	return nil, nil
+
+	return stdoutStderr, nil
 }
 
 func main() {
