@@ -8,6 +8,11 @@ import (
 )
 
 func main() {
+	// Having Flag Arguments
+	//var missing string
+	//flag.StringVar(&missing,"type","local","local Development")
+	//flag.Parse()
+
 	connectorList := []string{"gbiConnector", "PersistentDBConnector", "randomConnector"}
 	extractedList := ConnectorName()
 	haveMap := make(map[string]bool)
@@ -17,6 +22,8 @@ func main() {
 	for _, w := range connectorList {
 		if !haveMap[w] {
 			fmt.Printf("Missing Connector: %s\n", w)
+			//missing =w
+			//fmt.Printf("Missing Connector: %s\n", missing)
 		}
 	}
 }
