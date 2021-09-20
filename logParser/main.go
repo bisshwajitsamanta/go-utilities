@@ -21,15 +21,6 @@ func main() {
 	}
 }
 
-func Find(slice []string, val string) bool {
-	for _, item := range slice {
-		if item == val {
-			return true
-		}
-	}
-	return false
-}
-
 func ConnectorName() (tokenList []string) {
 	// Opening a file
 	file, err := os.Open("test.txt")
@@ -43,7 +34,11 @@ func ConnectorName() (tokenList []string) {
 		txtlines = append(txtlines, scanner.Text())
 	}
 
-	file.Close()
+	// Handling File if not got closed properly
+	garbage := file.Close()
+	if err != nil {
+		fmt.Println(garbage)
+	}
 	for _, eachline := range txtlines {
 		parse := strings.Fields(eachline)
 		for _, v := range parse {
