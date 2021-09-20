@@ -8,11 +8,17 @@ import (
 )
 
 func main() {
-
+	connectorList := []string{"gbiConnector", "PersistentDBConnector", "randomConnector"}
 	extractedList := ConnectorName()
-	fmt.Println(extractedList)
-
-	//connectorList := []string{"gbiConnector", "PersistentDBConnector", "randomConnector"}
+	haveMap := make(map[string]bool)
+	for _, v := range extractedList {
+		haveMap[v] = true
+	}
+	for _, w := range connectorList {
+		if !haveMap[w] {
+			fmt.Printf("Missing Connector: %s\n", w)
+		}
+	}
 }
 
 func Find(slice []string, val string) bool {
@@ -44,7 +50,7 @@ func ConnectorName() (tokenList []string) {
 			tokens := strings.Split(v, "=")
 			if len(tokens) > 1 {
 				if tokens[0] == "connectorName" {
-					tokenList = Unique(append(tokenList,tokens[1:]...))
+					tokenList = Unique(append(tokenList, tokens[1:]...))
 				}
 			}
 		}
