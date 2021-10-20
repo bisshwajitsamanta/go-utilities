@@ -32,11 +32,8 @@ var washingtonPost = []byte(`
 `)
 
 func main() {
-	//resp, _:= http.Get("https://www.washingtonpost.com/news-opinions-sitemap.xml")
-	//bytes, _:= ioutil.ReadAll(resp.Body)
 	bytes := washingtonPost
 	var s SitemapIndex
 	xml.Unmarshal(bytes, &s)
 	fmt.Println(s.Locations)
-	//resp.Body.Close()
 }
